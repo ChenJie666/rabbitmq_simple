@@ -1,0 +1,4 @@
+多消费者：
+通过设置channel.basicQos(1);和channel.basicAck(envelope.getDeliveryTag(),false);
+每次为消费者分配一条消息，消费者返回信息后再分配一条消息。
+充分发挥每个消费者的消费能力。多劳多得，公平分发。
