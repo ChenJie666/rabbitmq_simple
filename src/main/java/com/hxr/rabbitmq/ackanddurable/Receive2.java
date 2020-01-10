@@ -19,6 +19,8 @@ public class Receive2 {
 
         boolean durable = true;
         channel.queueDeclare(QUEUE_NAME, durable, false, false, null);
+        //
+        channel.basicQos(1);
 
         DefaultConsumer consumer = new DefaultConsumer(channel) {
             @Override

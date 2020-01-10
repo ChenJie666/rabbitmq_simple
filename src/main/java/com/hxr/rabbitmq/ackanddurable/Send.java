@@ -19,13 +19,12 @@ public class Send {
 
         //设置消息持久化
         boolean durable = true;
+        //生产者到消息队列的信道
         channel.queueDeclare(QUEUE_NAME, durable, false, false, null);
-        //设置队列单条分发
-        channel.basicQos(1);
 
         for (int i = 0; i < 50; i++) {
             String msg = "Hello durable--" + i;
-            channel.basicPublish("", "", null, msg.getBytes());
+            channel.basicPublish("", QUEUE_NAME, null, msg.getBytes());
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {

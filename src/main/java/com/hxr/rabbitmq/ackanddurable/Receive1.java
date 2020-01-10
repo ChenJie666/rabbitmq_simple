@@ -18,7 +18,9 @@ public class Receive1 {
         Channel channel = connection.createChannel();
 
         boolean durable = true;
+        //每个消费者自己的信道
         channel.queueDeclare(QUEUE_NAME, durable,false,false,null);
+        channel.basicQos(1);
 
         DefaultConsumer consumer = new DefaultConsumer(channel){
             @Override
