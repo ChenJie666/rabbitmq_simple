@@ -1,0 +1,8 @@
+消息应答和持久化：
+队列一定要收到消费者的消息应答才会将内存中的消息删除；如果一直没有收到应答，就会将信息发送给其他消费者。
+boolean autoAck = false;
+channel.basicConsume(QUEUE_NAME,autoAck,consumer);//将自动应答设为false；如果设为true表示一旦消息发出，队列就默认消费者受到消息，删除消息。
+
+为了避免mq宕机导致数据丢失，所以需要数据持久化。
+boolean durable = ture;
+channel.queueDeclare(QUEUE_NAME,durable,false,false,null);//声明队列时需要设置参数为true(如果队列已存在且未持久化会报错)
