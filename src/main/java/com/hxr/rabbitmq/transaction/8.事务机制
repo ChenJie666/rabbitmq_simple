@@ -1,0 +1,18 @@
+事务机制：
+通过事务对生产者发送的消息进行提交或回滚，保证数据不丢失
+
+与数据库回滚操作类似：
+try{
+            channel.txSelect();
+            String msg = "test transaction";
+            channel.basicPublish(EXCHANGE_NAME,"com.hxr",null,msg.getBytes());
+            int i = 1/0;
+            channel.txCommit();
+            System.out.println("transaction commit!");
+        }catch(Exception e){
+            channel.txRollback();
+            System.out.println("transaction rollback!");
+        }
+}
+
+缺点：串行操作，会阻塞线程，行表锁，效率不高。

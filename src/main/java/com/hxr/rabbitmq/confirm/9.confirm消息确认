@@ -1,0 +1,13 @@
+消息确认：
+生产者发送给MQ信息，MQ收到信息(如果是durable=true,需要完成存盘)后发送回执(成功发送ok，失败发送Nack)给生产者进行确认，
+保证数据不丢失。confirm模式是穿行的，也会阻塞线程。
+
+在生产者中开启确认模式并接受返回的信息
+channel.confirmSelect();
+
+if(!channel.waitForConfirms()){         //如果MQ接收到消息，方法返回true，否则为false；
+     System.out.println("消息发送失败");
+}else{
+     System.out.println("消息发送成功");
+}
+
