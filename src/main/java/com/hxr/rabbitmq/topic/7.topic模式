@@ -1,0 +1,10 @@
+topic模式：
+通过通配符来匹配路由，可以用#表示所有单词，用*表示单个单词。
+
+生产者声明topic模式的交换器，指定routingKey
+channel.exchangeDeclare(EXCHANGE_NAME,"topic");
+channel.basicPublish(EXCHANGE_NAME,"com.hxr.info",null,msg.getBytes());
+
+消费者通过#和*匹配路由
+channel.queueDeclare(QUEUE_NAME, true, false, false, null);
+channel.queueBind(QUEUE_NAME, EXCHANGE_NAME, "com.hxr.*");

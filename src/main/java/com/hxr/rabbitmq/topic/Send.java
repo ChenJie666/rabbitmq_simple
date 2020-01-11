@@ -1,4 +1,4 @@
-package com.hxr.rabbitmq.subscribe;
+package com.hxr.rabbitmq.topic;
 
 import com.hxr.rabbitmq.util.ConnectUtil;
 import com.rabbitmq.client.Channel;
@@ -9,7 +9,7 @@ import java.util.concurrent.TimeoutException;
 
 public class Send {
 
-    private static final String EXCHANGE_NAME = "test_exchange_fanout";
+    private static final String EXCHANGE_NAME = "test_exchange_topic";
 
     public static void main(String[] args) throws IOException, TimeoutException {
 
@@ -17,10 +17,11 @@ public class Send {
 
         Channel channel = connection.createChannel();
 
-        channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
+        channel.exchangeDeclare(EXCHANGE_NAME,"topic");
 
-        String msg = "exchange test!";
-        channel.basicPublish(EXCHANGE_NAME,"",null,msg.getBytes());
+        String msg = "topic test";
+        channel.basicPublish(EXCHANGE_NAME,"com.hxr.info",null,msg.getBytes());
+
 
         channel.close();
         connection.close();

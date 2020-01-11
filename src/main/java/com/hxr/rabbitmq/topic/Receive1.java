@@ -1,4 +1,4 @@
-package com.hxr.rabbitmq.subscribe;
+package com.hxr.rabbitmq.topic;
 
 import com.hxr.rabbitmq.util.ConnectUtil;
 import com.rabbitmq.client.*;
@@ -9,29 +9,25 @@ import java.util.concurrent.TimeoutException;
 
 public class Receive1 {
 
-    private static final String EXCHANGE_NAME = "test_exchange_fanout";
-    private static final String QUEUE_NAME = "test_queue_fanout1";
+    private static final String EXCHANGE_NAME = "test_exchange_topic";
+    private static final String QUEUE_NAME = "test_queue_topic1";
 
     public static void main(String[] args) throws IOException, TimeoutException {
 
         Connection connection = ConnectUtil.getConnection();
-
         Channel channel = connection.createChannel();
 
-        channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-        channel.basicQos(1);
-        channel.queueBind(QUEUE_NAME, EXCHANGE_NAME, "");
+        channel.queueDeclare(QUEUE_NAME, true, false, false, null);
+        channel.queueBind(QUEUE_NAME, EXCHANGE_NAME, "com.hxr.*");
 
         DefaultConsumer consumer = new DefaultConsumer(channel){
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
-                System.out.println(envelope.getRoutingKey() + "接收到的数据" + new String(body, Charset.forName("utf-8")));
+                System.out.println(envelope.getRoutingKey() + "获取数据" + new String(body, Charset.forName("utf-8")));
 
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }finally{
                     System.out.println("[1] done");
                     channel.basicAck(envelope.getDeliveryTag(),false);
                 }
@@ -41,5 +37,4 @@ public class Receive1 {
         channel.basicConsume(QUEUE_NAME,false,consumer);
 
     }
-
 }

@@ -1,0 +1,10 @@
+路由模式：
+通过交换机对符合路由条件的队列中发送消息。
+
+声明交换器采用direct模式
+channel.exchangeDeclare(EXCHANGE_NAME,"direct");
+channel.basicPublish(EXCHANGE_NAME, "error", null, msg.getBytes());
+
+声明队列并绑定交换器；
+channel.queueDeclare(QUEUE_NAME, true, false, false, null);
+channel.queueBind(QUEUE_NAME, EXCHANGE_NAME, "warn");
